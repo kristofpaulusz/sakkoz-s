@@ -1,0 +1,11 @@
+body {
+    width: 90%;
+    margin: auto;
+    background-color: teal;
+    color: white;
+    text-align: center;
+}
+#chessboard {
+    display: inline-grid;
+    grid-template-columns: repeat(8, 1fr);
+}
