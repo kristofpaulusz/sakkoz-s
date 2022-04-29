@@ -1,13 +1,11 @@
 window.addEventListener("load", init);
 
-
 class Babuk {
   constructor(position, color, img, isAlive) {
   this.position = position;
   this.color = color;
   this.img = img;
   this.isAlive = isAlive;
-  
   }
   getPosition() {
     return this.position[0]+this.position[1]
@@ -50,8 +48,6 @@ class Futo extends Babuk {
 // let placeholder = '<img src="picks/wPawn.png" alt="">';
 const xAxis = ["A", "B", "C", "D", "E", "F", "G", "H"];
 const yAxis = ["8", "7", "6", "5", "4", "3", "2", "1"];
-const imgTagek = ID("chessboard").querySelectorAll("img");
-const divTagek = ID("chessboard").querySelectorAll("div");
 
 function tile(elem) {
   return elem.srcElement.parentElement.id;
@@ -130,9 +126,7 @@ function generate() {
   return pieces;
 }
 function draw(csapatok) {
-  for (let i = 0; i < ID("chessboard").getElementsByTagName("div").length; i++) {
-    ID("chessboard").getElementsByTagName("div")[i].innerHTML = "";
-  }
+  
    for (let i = 0; i < csapatok.length; i++) {
      ID(csapatok[i].getPosition()).innerHTML = csapatok[i].img;
    } 
@@ -149,22 +143,57 @@ function setIds() {
     }
   }
 }
-function kattintas() {
-  console.log("Kattintható")
-  divTagek.forEach(element => {
-    element.removeEventListener("click", kattintas)
-  });
+function lepes(movingPiece) {
+  this.innerHTML = movingPiece.img;
+  ID(movingPiece.getPosition()).innerHTML = "";
+  
 }
+// function highlightValid(mypiece) {
+//   let myArray = ID("chessboard").getElementsByTagName("div");
+//   myArray.forEach(function (hm) {
+//     console.log(hm);
+//   });
+//   // myArray.forEach(element => {
+//   //   console.log(element);
+//   // });
+//   // ID("chessboard").getElementsByTagName("div").forEach(validDiv => {
+//   //   console.log(validDiv)
+//     // validDiv.addEventListener("click", lepes(mypiece))
+//   // })
+// }
+function kattintas() {
+ // console.log(this.parentElement.id)
+  pieces.forEach(piece => {
+    if (piece.getPosition()==this.parentElement.id) {
+      let selectedPiece = piece;
+      // highlightValid(selectedPiece);
+      let validDivs = ID("chessboard").getElementsByTagName("div");
+      for (let i = 0; i < validDivs.length; i++) {
+        validDivs[i].addEventListener("click", function (event) {
+          ID(selectedPiece.getPosition()).innerHTML = "";
+          this.innerHTML = selectedPiece.img;
+        })
+        
+      }
+    }
+  })
+}
+
 function init() {
   var my_board = 8;
   board(my_board);
   setIds();
   let pieces = generate();
-  // console.log(pieces);
   draw(pieces);
-  
-  divTagek.forEach(element => {
+  // console.log($("img")[0].parentElement);
+  $("img").forEach(element => {
+    element.addEventListener("mouseover", function () {
+      element.setAttribute('class', "selected")
+    })
+    element.addEventListener("mouseout", function () {
+      element.setAttribute('class', "")
+    })
     element.addEventListener("click", kattintas)
-  });
-  
+    
+  })
 }

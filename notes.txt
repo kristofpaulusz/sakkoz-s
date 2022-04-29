@@ -1,0 +1,11 @@
+Minden lépéskor az előző poziciórol a kattintotra érkezik --> img atrbutum kattintott pozba kerül, frissül poz atrbutum és megürül az eredeti pozi sorrend nem ez
+Kattintás után a valid blokkokat megkeresi(figuránként változó) és highlightólja+event listener kattra katt után 1. sor
+Valid Block: Olyan block ahova a bábu léphet, nem foglalja el szövetséges ÉLŐ bábu, 
+Valid blokkokat gyűjts tömbe és highlightold
+
+A lépés:
+1. Kattintás a képre --> PozitMegjegyez ObjetMegkeres, + valid tileokat megmutatja
+2. Valid: EventList rajtuk kattintható
+3. Ha kattintunk, eredeti poziban lévő kép eltűnik, új poziban megjelenik + űtírja objban is
+
+Mozogjanak a figurák akárhogy + A code legyen értelmes

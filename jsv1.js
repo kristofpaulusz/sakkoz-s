@@ -1,19 +1,14 @@
 window.addEventListener("load", init);
 
-
 class Babuk {
   constructor(position, color, img, isAlive) {
   this.position = position;
   this.color = color;
   this.img = img;
   this.isAlive = isAlive;
-  
   }
   getPosition() {
     return this.position[0]+this.position[1]
-  }
-  greet() {
-    return "I am "+this.color+" and I am standing on "+this.getPosition();
   }
 }
 class Gyalog extends Babuk {
@@ -50,8 +45,6 @@ class Futo extends Babuk {
 // let placeholder = '<img src="picks/wPawn.png" alt="">';
 const xAxis = ["A", "B", "C", "D", "E", "F", "G", "H"];
 const yAxis = ["8", "7", "6", "5", "4", "3", "2", "1"];
-const imgTagek = ID("chessboard").querySelectorAll("img");
-const divTagek = ID("chessboard").querySelectorAll("div");
 
 function tile(elem) {
   return elem.srcElement.parentElement.id;
@@ -62,9 +55,9 @@ function eleresi(src) {
 function ID(elem) {
   return document.getElementById(elem);
 }
-// function TAG(elem) {
-//   document.getElementsByTagName(elem);
-// }
+function TAG(elem) {
+  document.getElementsByTagName(elem);
+}
 function $(elem) {
   return document.querySelectorAll(elem)
 }
@@ -99,11 +92,12 @@ function board(base) {
   }
 }
 function generate() {
-  pieces = [];
+  feher = [];
+  fekete = [];
   // // Gyalog
   for (let i = 0; i < 8; i++) {
-    pieces.push(new Gyalog([xAxis[i],"2"],"fehér", eleresi("picks/wPawn.png"), true, false));
-    pieces.push(new Gyalog([xAxis[i],"7"],"fekete", eleresi("picks/bPawnB.png"), true, false));
+    feher.push(new Gyalog([xAxis[i],"2"],"fehér", eleresi("picks/wPawn.png"), true, false));
+    fekete.push(new Gyalog([xAxis[i],"7"],"fekete", eleresi("picks/bPawnB.png"), true, false));
   }
   // // Bástya, Ló, Futó
   let osztalyok = [Bastya, Lo, Futo];
@@ -111,10 +105,10 @@ function generate() {
   let feketeUtak = ["picks/bRookB.png", "picks/bKnightB.png", "picks/bBishopB.png"]
   f = 7;
   for (let i = 0; i < 3; i++) {
-    pieces.push(new osztalyok[i]([xAxis[i],"1"],"fehér",eleresi(feherUtak[i]),true))
-    pieces.push(new osztalyok[i]([xAxis[f],"1"],"fehér",eleresi(feherUtak[i]),true))
-    pieces.push(new osztalyok[i]([xAxis[i],"8"],"fekete",eleresi(feketeUtak[i]),true))
-    pieces.push(new osztalyok[i]([xAxis[f],"8"],"fekete",eleresi(feketeUtak[i]),true))
+    feher.push(new osztalyok[i]([xAxis[i],"1"],"fehér",eleresi(feherUtak[i]),true))
+    feher.push(new osztalyok[i]([xAxis[f],"1"],"fehér",eleresi(feherUtak[i]),true))
+    fekete.push(new osztalyok[i]([xAxis[i],"8"],"fekete",eleresi(feketeUtak[i]),true))
+    fekete.push(new osztalyok[i]([xAxis[f],"8"],"fekete",eleresi(feketeUtak[i]),true))
     f -= 1;
   }
   // // Király, Királynő
@@ -123,22 +117,23 @@ function generate() {
     feherUtak = ["picks/wQueen.png", "picks/wKing.png"]
     feketeUtak = ["picks/bQueenB.png", "picks/bKingB.png"]
     for (let i = 0; i < 2; i++) {
-      pieces.push(new osztalyok[i]([DE[i],"1"],"fehér",eleresi(feherUtak[i]),true))
-      pieces.push(new osztalyok[i]([DE[i],"8"],"fekete",eleresi(feketeUtak[i]),true))
+      feher.push(new osztalyok[i]([DE[i],"1"],"fehér",eleresi(feherUtak[i]),true))
+      fekete.push(new osztalyok[i]([DE[i],"8"],"fekete",eleresi(feketeUtak[i]),true))
     }
   
-  return pieces;
+  return [feher, fekete];
 }
 function draw(csapatok) {
-  for (let i = 0; i < ID("chessboard").getElementsByTagName("div").length; i++) {
-    ID("chessboard").getElementsByTagName("div")[i].innerHTML = "";
-  }
-   for (let i = 0; i < csapatok.length; i++) {
-     ID(csapatok[i].getPosition()).innerHTML = csapatok[i].img;
+  for (let f = 0; f < csapatok.length; f++) {
+   for (let i = 0; i < csapatok[f].length; i++) {
+     ID(csapatok[f][i].getPosition()).innerHTML = csapatok[f][i].img;
    } 
-  
+  }
 }
-function setIds() {
+function init() {
+  var my_board = 8;
+  board(my_board);
+
   let tiles = ID("chessboard").getElementsByTagName("div");
   let ids = 0;
   for (let i = 0; i < yAxis.length; i++) {
@@ -148,23 +143,13 @@ function setIds() {
       ids += 1;
     }
   }
-}
-function kattintas() {
-  console.log("Kattintható")
-  divTagek.forEach(element => {
-    element.removeEventListener("click", kattintas)
-  });
-}
-function init() {
-  var my_board = 8;
-  board(my_board);
-  setIds();
-  let pieces = generate();
-  // console.log(pieces);
-  draw(pieces);
-  
-  divTagek.forEach(element => {
-    element.addEventListener("click", kattintas)
-  });
-  
+  draw(generate());
+  var figurak = $("img");
+  for (let i = 0; i < figurak.length; i++) {
+    figurak[i].addEventListener("click", function (event) {
+        console.log(tile(event))
+    
+    })
+    
+  }
 }

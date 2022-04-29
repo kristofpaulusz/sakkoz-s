@@ -9,3 +9,14 @@ body {
     display: inline-grid;
     grid-template-columns: repeat(8, 1fr);
 }
+#chessboard div img {
+    width: 100%;
+}
+
+.selected {
+    border: 2px solid silver;
+    cursor: grab;
+}
+.bck {
+    background-color: aqua;
+}
